@@ -1,0 +1,116 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2025-06-18 00:00:00",
+  "containerVersion": {
+    "container": {
+      "publicId": "GTM-XXXXXXX",
+      "name": "Funnel Abandonment Detection"
+    },
+    "tag": [
+      {
+        "name": "Set Form Completed Flag",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "template",
+            "key": "html",
+            "value": "<script>window.formCompleted = true;</script>"
+          },
+          {
+            "type": "boolean",
+            "key": "supportDocumentWrite",
+            "value": false
+          }
+        ],
+        "trigger": [
+          {
+            "triggerId": "2147483648"
+          }
+        ]
+      },
+      {
+        "name": "Clarity - Set Funnel Stage - Abandoned",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "template",
+            "key": "html",
+            "value": "<script>\n  if (typeof clarity === 'function' && !window.formCompleted) {\n    clarity('set', 'form_stage', 'abandoned');\n  }\n</script>"
+          },
+          {
+            "type": "boolean",
+            "key": "supportDocumentWrite",
+            "value": false
+          }
+        ],
+        "trigger": [
+          {
+            "triggerId": "2147483649"
+          }
+        ]
+      }
+    ],
+    "trigger": [
+      {
+        "triggerId": "2147483648",
+        "name": "Trigger - Used Vehicle Enquiry",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "equals",
+            "parameter": [
+              {
+                "type": "template",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "template",
+                "key": "arg1",
+                "value": "Used Vehicle Enquiry"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "triggerId": "2147483649",
+        "name": "Timer - Form Abandonment",
+        "type": "TIMER",
+        "filter": [
+          {
+            "type": "equals",
+            "parameter": [
+              {
+                "type": "template",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "template",
+                "key": "arg1",
+                "value": "Form Interaction"
+              }
+            ]
+          }
+        ],
+        "interval": 45000,
+        "limit": 1,
+        "eventName": "gtm.timer"
+      }
+    ],
+    "variable": [
+      {
+        "name": "JS - Form Completed Flag",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "template",
+            "key": "javascript",
+            "value": "function() {\n  return window.formCompleted || false;\n}"
+          }
+        ]
+      }
+    ]
+  }
+}

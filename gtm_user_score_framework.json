@@ -1,0 +1,198 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2025-06-19 21:12:35",
+  "containerVersion": {
+    "container": {
+      "publicId": "GTM-USER-SCORE",
+      "name": "User Behavior Scoring Framework"
+    },
+    "tag": [
+      {
+        "name": "Init User Score",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "template",
+            "key": "html",
+            "value": "<script>window.userScore = 0;</script>"
+          },
+          {
+            "type": "boolean",
+            "key": "supportDocumentWrite",
+            "value": false
+          }
+        ],
+        "trigger": [
+          {
+            "triggerId": "2147483648"
+          }
+        ]
+      },
+      {
+        "name": "Score +3 on Form Interaction",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "template",
+            "key": "html",
+            "value": "<script>if (typeof window.userScore === 'number') { window.userScore += 3; }</script>"
+          },
+          {
+            "type": "boolean",
+            "key": "supportDocumentWrite",
+            "value": false
+          }
+        ],
+        "trigger": [
+          {
+            "triggerId": "2147483649"
+          }
+        ]
+      },
+      {
+        "name": "Score +5 on Form Submission",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "template",
+            "key": "html",
+            "value": "<script>if (typeof window.userScore === 'number') { window.userScore += 5; }</script>"
+          },
+          {
+            "type": "boolean",
+            "key": "supportDocumentWrite",
+            "value": false
+          }
+        ],
+        "trigger": [
+          {
+            "triggerId": "2147483650"
+          }
+        ]
+      },
+      {
+        "name": "Score -4 on Form Abandonment",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "template",
+            "key": "html",
+            "value": "<script>if (typeof window.userScore === 'number') { window.userScore -= 4; }</script>"
+          },
+          {
+            "type": "boolean",
+            "key": "supportDocumentWrite",
+            "value": false
+          }
+        ],
+        "trigger": [
+          {
+            "triggerId": "2147483651"
+          }
+        ]
+      },
+      {
+        "name": "Push userScore to Clarity",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "template",
+            "key": "html",
+            "value": "<script>\n  if (typeof clarity === 'function' && typeof window.userScore === 'number') {\n    clarity('set', 'user_score', window.userScore);\n  }\n</script>"
+          },
+          {
+            "type": "boolean",
+            "key": "supportDocumentWrite",
+            "value": false
+          }
+        ],
+        "trigger": [
+          {
+            "triggerId": "2147483652"
+          }
+        ]
+      }
+    ],
+    "trigger": [
+      {
+        "triggerId": "2147483648",
+        "name": "All Pages",
+        "type": "PAGEVIEW"
+      },
+      {
+        "triggerId": "2147483649",
+        "name": "Trigger - Form Interaction",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "equals",
+            "parameter": [
+              {
+                "type": "template",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "template",
+                "key": "arg1",
+                "value": "Form Interaction"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "triggerId": "2147483650",
+        "name": "Trigger - Used Vehicle Enquiry",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "equals",
+            "parameter": [
+              {
+                "type": "template",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "template",
+                "key": "arg1",
+                "value": "Used Vehicle Enquiry"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "triggerId": "2147483651",
+        "name": "Timer - Form Abandonment",
+        "type": "TIMER",
+        "interval": 45000,
+        "limit": 1,
+        "eventName": "gtm.timer",
+        "filter": [
+          {
+            "type": "equals",
+            "parameter": [
+              {
+                "type": "template",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "template",
+                "key": "arg1",
+                "value": "Form Interaction"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "triggerId": "2147483652",
+        "name": "Push Score to Clarity",
+        "type": "PAGEVIEW"
+      }
+    ]
+  }
+}

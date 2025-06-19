@@ -1,0 +1,242 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2025-06-19 21:29:40",
+  "containerVersion": {
+    "container": {
+      "publicId": "GTM-SIGNALSTACK",
+      "name": "SignalStack - User Score Framework"
+    },
+    "tag": [
+      {
+        "name": "Init User Score",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "template",
+            "key": "html",
+            "value": "<script>window.userScore = 0;</script>"
+          },
+          {
+            "type": "boolean",
+            "key": "supportDocumentWrite",
+            "value": false
+          }
+        ],
+        "trigger": [
+          {
+            "triggerId": "1"
+          }
+        ]
+      },
+      {
+        "name": "Score +3 on Form Interaction",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "template",
+            "key": "html",
+            "value": "<script>if (typeof window.userScore === 'number') { window.userScore += 3; }</script>"
+          },
+          {
+            "type": "boolean",
+            "key": "supportDocumentWrite",
+            "value": false
+          }
+        ],
+        "trigger": [
+          {
+            "triggerId": "2"
+          }
+        ]
+      },
+      {
+        "name": "Score +5 on Form Submission",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "template",
+            "key": "html",
+            "value": "<script>if (typeof window.userScore === 'number') { window.userScore += 5; }</script>"
+          },
+          {
+            "type": "boolean",
+            "key": "supportDocumentWrite",
+            "value": false
+          }
+        ],
+        "trigger": [
+          {
+            "triggerId": "3"
+          }
+        ]
+      },
+      {
+        "name": "Score -4 on Form Abandonment",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "template",
+            "key": "html",
+            "value": "<script>if (typeof window.userScore === 'number') { window.userScore -= 4; }</script>"
+          },
+          {
+            "type": "boolean",
+            "key": "supportDocumentWrite",
+            "value": false
+          }
+        ],
+        "trigger": [
+          {
+            "triggerId": "4"
+          }
+        ]
+      },
+      {
+        "name": "Push userScore to Clarity on unload",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "template",
+            "key": "html",
+            "value": "<script>\n  window.addEventListener('beforeunload', function() {\n    if (typeof clarity === 'function' && typeof window.userScore === 'number') {\n      clarity('set', 'user_score', window.userScore);\n    }\n  });\n</script>"
+          },
+          {
+            "type": "boolean",
+            "key": "supportDocumentWrite",
+            "value": false
+          }
+        ],
+        "trigger": [
+          {
+            "triggerId": "1"
+          }
+        ]
+      },
+      {
+        "name": "Push userScore to GA4 as user property",
+        "type": "ga4Event",
+        "parameter": [
+          {
+            "type": "template",
+            "key": "eventName",
+            "value": "user_score_snapshot"
+          },
+          {
+            "type": "list",
+            "key": "userProperties",
+            "list": [
+              {
+                "map": [
+                  {
+                    "type": "template",
+                    "key": "name",
+                    "value": "user_score"
+                  },
+                  {
+                    "type": "template",
+                    "key": "value",
+                    "value": "{{JS - User Score}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "trigger": [
+          {
+            "triggerId": "3"
+          }
+        ]
+      }
+    ],
+    "trigger": [
+      {
+        "triggerId": "1",
+        "name": "All Pages",
+        "type": "PAGEVIEW"
+      },
+      {
+        "triggerId": "2",
+        "name": "Trigger - Form Interaction",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "equals",
+            "parameter": [
+              {
+                "type": "template",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "template",
+                "key": "arg1",
+                "value": "Form Interaction"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "triggerId": "3",
+        "name": "Trigger - Used Vehicle Enquiry",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "equals",
+            "parameter": [
+              {
+                "type": "template",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "template",
+                "key": "arg1",
+                "value": "Used Vehicle Enquiry"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "triggerId": "4",
+        "name": "Timer - Form Abandonment",
+        "type": "TIMER",
+        "interval": 45000,
+        "limit": 1,
+        "eventName": "gtm.timer",
+        "filter": [
+          {
+            "type": "equals",
+            "parameter": [
+              {
+                "type": "template",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "template",
+                "key": "arg1",
+                "value": "Form Interaction"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "variable": [
+      {
+        "name": "JS - User Score",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "template",
+            "key": "javascript",
+            "value": "function() {\n  return typeof window.userScore === 'number' ? window.userScore : 0;\n}"
+          }
+        ]
+      }
+    ]
+  }
+}
