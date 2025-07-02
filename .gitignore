@@ -1,0 +1,85 @@
+# GTM Container Repository .gitignore
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor and IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.sublime-project
+.sublime-workspace
+
+# Node.js (if using npm packages for development tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Build outputs (if generating minified/compiled versions)
+dist/
+build/
+output/
+
+# Backup files
+*.bak
+*.backup
+*_backup
+*_old
+
+# GTM specific files to ignore
+# Uncomment if you have files you don't want to track:
+# *_test.json          # Test container versions
+# *_draft.json         # Draft containers
+# *_staging.json       # Staging versions
+# gtm_debug_*          # Debug containers
+
+# Documentation build files
+docs/_build/
+*.pdf
+
+# Coverage reports (if running tests)
+coverage/
+*.lcov
+
+# Cache directories
+.cache/
+.parcel-cache/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Optional: Ignore containers with sensitive data
+# sensitive_*
+# production_*
+# live_*
